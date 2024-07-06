@@ -1,7 +1,7 @@
 import {
   Ref, computed, ComputedRef, WritableComputedRef,
 } from 'vue';
-import type { Item } from '../types/main';
+import type {IsRowSelectableFunction, Item} from '../types/main';
 import type { MultipleSelectStatus } from '../types/internal';
 
 export default function usePageItems(
@@ -14,6 +14,7 @@ export default function usePageItems(
   showIndex: Ref<boolean>,
   totalItems: ComputedRef<Item[]>,
   totalItemsLength: ComputedRef<number>,
+  isRowSelectable: IsRowSelectableFunction | boolean
 ) {
   const currentPageFirstIndex = computed((): number => (currentPaginationNumber.value - 1)
     * rowsPerPageRef.value + 1);
@@ -53,7 +54,9 @@ export default function usePageItems(
     });
     if (isNoneSelected) return 'noneSelected';
 
-    if (selectItemsComputed.value.length === totalItems.value.length) {
+    if (selectItemsComputed.value.length === totalItems.value.filter((item:Item, index) =>
+        typeof isRowSelectable === 'function' ? isRowSelectable(item, index) : isRowSelectable
+    ).length) {
       const isAllSelected = selectItemsComputed.value.every((itemSelected) => {
         if (totalItems.value.findIndex((item) => JSON.stringify(itemSelected) === JSON.stringify(item)) === -1) {
           return false;

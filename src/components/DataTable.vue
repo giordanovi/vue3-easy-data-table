@@ -163,7 +163,7 @@
                   />
                 </template>
                 <template v-else-if="column === 'checkbox'">
-                  <SingleSelectCheckBox
+                  <SingleSelectCheckBox v-if="typeof isRowSelectable === 'function' ? isRowSelectable(item, index + 1) : isRowSelectable"
                     :checked="item[column]"
                     @change="toggleSelectItem(item)"
                   />
@@ -485,6 +485,7 @@ const {
   serverItemsLength,
   multiSort,
   emits,
+  props.isRowSelectable
 );
 
 const {
@@ -521,6 +522,7 @@ const {
   showIndex,
   totalItems,
   totalItemsLength,
+  props.isRowSelectable
 );
 
 const prevPageEndIndex = computed(() => {

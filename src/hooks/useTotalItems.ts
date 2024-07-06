@@ -1,7 +1,7 @@
 import {
   Ref, computed, ComputedRef, watch,
 } from 'vue';
-import type { Item, FilterOption } from '../types/main';
+import type {Item, FilterOption, IsRowSelectableFunction} from '../types/main';
 import type { ClientSortOptions, EmitsEventName } from '../types/internal';
 import { getItemValue } from '../utils';
 
@@ -16,6 +16,7 @@ export default function useTotalItems(
   serverItemsLength: Ref<number>,
   multiSort: Ref<boolean>,
   emits: (event: EmitsEventName, ...args: any[]) => void,
+  isRowSelectable: IsRowSelectableFunction | boolean
 ) {
   const generateSearchingTarget = (item: Item): string => {
     if (typeof searchField.value === 'string' && searchField.value !== '') return getItemValue(searchField.value, item);
@@ -136,7 +137,9 @@ export default function useTotalItems(
   });
 
   const toggleSelectAll = (isChecked: boolean): void => {
-    selectItemsComputed.value = isChecked ? totalItems.value : [];
+    selectItemsComputed.value = isChecked ? totalItems.value.filter((item:Item, index) =>
+        typeof isRowSelectable === 'function' ? isRowSelectable(item, index) : isRowSelectable
+    ) : [];
     if (isChecked) emits('selectAll');
   };
 

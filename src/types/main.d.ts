@@ -53,6 +53,7 @@ export type UpdateSortArgument = {
 
 export type HeaderItemClassNameFunction = (header: Header, columnNumber: number) => string
 export type BodyRowClassNameFunction = (item: Item, rowNumber: number) => string
+export type IsRowSelectableFunction = (item: Item, rowNumber: number) => boolean
 export type BodyItemClassNameFunction = (column: string, rowNumber: number) => string
 
 export type TextDirection = 'center' | 'left' | 'right'

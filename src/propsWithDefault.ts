@@ -2,7 +2,7 @@ import { PropType } from 'vue';
 import type {
   SortType, Item, ServerOptions, FilterOption,
   HeaderItemClassNameFunction, BodyItemClassNameFunction, BodyRowClassNameFunction,
-  TextDirection,
+  TextDirection, IsRowSelectableFunction,
 } from './types/main';
 import type { ClickEventType } from './types/internal';
 
@@ -78,6 +78,10 @@ export default {
   itemsSelected: {
     type: Array as PropType<Item[]> | null,
     default: null,
+  },
+  isRowSelectable: {
+    type: [Function, Boolean] as PropType<IsRowSelectableFunction | boolean>,
+    default: '',
   },
   loading: {
     type: Boolean,
